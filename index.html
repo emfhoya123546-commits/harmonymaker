@@ -94,7 +94,7 @@ input[type=number]{width:64px;font-family:var(--f-mono);font-variant-numeric:tab
 .rollwrap{overflow-x:auto;overflow-y:hidden;position:relative;margin-top:8px}
 .rollwrap canvas{position:sticky;left:0;display:block;touch-action:pan-x;cursor:crosshair}
 .spacer{height:1px;margin-top:-1px}
-.rollfoot{display:flex;flex-wrap:wrap;gap:6px 16px;padding:8px 12px 10px;border-top:1px solid var(--line);font-size:12px;color:var(--ink2)}
+.rollfoot{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink2)}
 .rollfoot kbd{font:500 11px var(--f-mono);background:var(--sunk);border-radius:4px;padding:1px 5px;color:var(--ink)}
 .chordgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0;padding:12px}
 .cbar{display:flex;flex-direction:column;gap:2px;border-left:2px solid var(--ink);padding:4px 8px 8px;min-width:0}
@@ -103,8 +103,16 @@ input[type=number]{width:64px;font-family:var(--f-mono);font-variant-numeric:tab
 .cbar input:focus{outline:none;border-bottom:2px solid var(--mel)}
 .cbar.bad input{color:var(--bad);border-bottom-color:var(--bad)}
 .cbar.off .bn::after{content:" · 화음 끔";color:var(--ink3)}
-.chordhelp{padding:0 12px 12px;font-size:12.5px;color:var(--ink2);display:flex;flex-wrap:wrap;gap:4px 16px}
+.chordhelp{font-size:12.5px;color:var(--ink2);display:flex;flex-wrap:wrap;gap:4px 16px}
 .chordhelp code{font:500 12px var(--f-mono);background:var(--sunk);padding:1px 5px;border-radius:4px;color:var(--ink)}
+.guide{border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.guide>summary{list-style:none;cursor:pointer;padding:8px 12px;font-size:13px;font-weight:600;color:var(--ink2);display:flex;align-items:center;gap:8px;user-select:none}
+.guide>summary::-webkit-details-marker{display:none}
+.guide>summary::before{content:"";width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(-45deg);transition:transform .15s;flex:none}
+.guide[open]>summary::before{transform:rotate(45deg)}
+.guide>summary:hover{color:var(--ink)}
+.guide>.gbody{padding:0 12px 12px;display:flex;flex-direction:column;gap:6px}
+.guide.flat{border:0;border-top:1px solid var(--line);border-radius:0;background:transparent}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:9px 16px;border-radius:8px;font-size:13.5px;opacity:0;pointer-events:none;transition:.2s;z-index:50;max-width:calc(100vw - 32px)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .range{width:110px;accent-color:var(--mel)}
@@ -140,17 +148,17 @@ input[type=number]{width:64px;font-family:var(--f-mono);font-variant-numeric:tab
         </label>
         <label class="fld" id="trackRow" hidden><span>멜로디 트랙</span><select id="trackSel" style="flex:1;min-width:0"></select></label>
         <label class="chk"><input type="checkbox" id="autoChords" checked> 불러올 때 코드도 자동 인식</label>
-        <p class="hint">트랙이 여러 개면 가장 위에서 혼자 노래하는 트랙을 멜로디로 고르고, 나머지 트랙으로 코드를 찾아요. 멜로디만 있으면 멜로디로 코드를 추측해요.</p>
+        <details class="guide" id="g-midi"><summary>어떻게 인식하나요</summary><div class="gbody"><p class="hint">트랙이 여러 개면 가장 위에서 혼자 노래하는 트랙을 멜로디로 고르고, 나머지 트랙으로 코드를 찾아요. 멜로디만 있으면 멜로디로 코드를 추측해요.</p></div></details>
       </div>
 
       <div class="pane" data-pane="voice" hidden>
-        <p class="sub">녹음하는 법</p>
+        <details class="guide" id="g-rec"><summary>녹음하는 법</summary><div class="gbody">
         <ol class="ol">
           <li>아래 ②에 코드를 마디마다 적고 BPM을 맞춰요.</li>
           <li>가이드 트랙을 저장하거나, 위의 ▶ 재생을 카운트인 켜고 틀어요.</li>
           <li>헤드폰으로 들으면서 멜로디만 녹음해요. 스피커 소리가 섞이면 인식이 틀어져요.</li>
           <li>녹음 파일(wav, mp3, m4a)을 올려요.</li>
-        </ol>
+        </ol></div></details>
         <div class="row">
           <label class="fld"><span>카운트인</span><select id="guideCI"><option value="1">1마디</option><option value="2">2마디</option></select></label>
           <label class="chk"><input type="checkbox" id="guidePad" checked> 코드 반주</label>
@@ -176,7 +184,7 @@ input[type=number]{width:64px;font-family:var(--f-mono);font-variant-numeric:tab
       </div>
 
       <div class="pane" data-pane="draw" hidden>
-        <p class="hint">오른쪽 피아노롤 빈 곳을 누르면 음이 생겨요. 드래그로 옮기고, 음 오른쪽 끝을 끌면 길이가 바뀌어요. 칸 크기는 롤 위의 <b>스냅</b>에서 골라요.</p>
+        <details class="guide" id="g-draw"><summary>그리는 법</summary><div class="gbody"><p class="hint">오른쪽 피아노롤 빈 곳을 누르면 음이 생겨요. 드래그로 옮기고, 음 오른쪽 끝을 끌면 길이가 바뀌어요. 칸 크기는 롤 위의 <b>스냅</b>에서 골라요.</p></div></details>
         <div class="row">
           <button class="btn" id="clearMel">멜로디 지우기</button>
           <button class="btn" id="newSong">빈 곡으로 시작</button>
@@ -234,22 +242,22 @@ input[type=number]{width:64px;font-family:var(--f-mono);font-variant-numeric:tab
       </div>
       <div class="legend" id="legend"></div>
       <div class="rollwrap" id="rollwrap"><canvas id="roll"></canvas><div class="spacer" id="spacer"></div></div>
-      <div class="rollfoot">
+      <details class="guide flat" id="g-roll"><summary>피아노롤 조작법</summary><div class="gbody"><div class="rollfoot">
         <span>빈 곳 누르기 · 음 추가</span><span>음 끌기 · 이동</span><span>오른쪽 끝 끌기 · 길이</span><span>더블클릭 · 삭제</span>
         <span>맨 위 줄 · 화음 켜고 끄기</span><span>코드 줄 누르기 · 재생 시작 위치</span>
         <span><kbd>Space</kbd> 재생 <kbd>Del</kbd> 삭제 <kbd>Ctrl Z</kbd> 되돌리기</span>
-      </div>
+      </div></div></details>
     </div>
 
     <div class="surface">
       <div class="bar-h"><h3>코드표</h3><button class="btn ghost" id="add4">마디 4개 추가</button></div>
       <div class="chordgrid" id="chordgrid"></div>
-      <div class="chordhelp">
+      <details class="guide flat" id="g-chord"><summary>코드 적는 법</summary><div class="gbody"><div class="chordhelp">
         <span>한 마디 두 코드 <code>C G</code></span>
         <span>박 단위 <code>C / / G</code></span>
         <span>빈칸이나 <code>%</code> · 앞 코드 유지</span>
         <span>예 <code>Am7</code> <code>Fmaj7</code> <code>G7sus4</code> <code>Bm7b5</code> <code>C/E</code> <code>Bbdim</code></span>
-      </div>
+      </div></div></details>
     </div>
   </section>
 </main>
@@ -1074,6 +1082,10 @@ try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>dr
 new MutationObserver(()=>draw()).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>draw());
 
+document.querySelectorAll('details.guide').forEach(d=>{
+  try{ const v=localStorage.getItem('guide:'+d.id); if(v!==null) d.open=v==='1'; }catch(e){}
+  d.addEventListener('toggle',()=>{ try{ localStorage.setItem('guide:'+d.id,d.open?'1':'0'); }catch(e){} if(d.id==='g-roll') layout(); });
+});
 refreshAll(true);
 })();
 </script>
